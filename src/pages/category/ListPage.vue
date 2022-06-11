@@ -12,7 +12,7 @@
         <template v-slot:top>
           <span class="text-h6">Categorias</span>
           <q-space />
-          <q-btn color="primary" icon="mdi-plus" label="Adicionar" outline :to="{ name: 'categories-create' }" />
+          <q-btn color="primary" icon="mdi-plus" label="Adicionar" outline :to="{ name: 'form-category' }" />
         </template>
 
         <template v-slot:body-cell-actions="props">
@@ -23,7 +23,13 @@
               </q-tooltip>
             </q-btn>
 
-            <q-btn color="negative" icon="mdi-delete-outline" outline size="sm" @click="onDelete(props.key)">
+            <q-btn
+              color="negative"
+              icon="mdi-delete-outline"
+              size="sm"
+              outline
+              @click="onDelete(props.key, props.row.name)"
+            >
               <q-tooltip anchor="top middle" self="center middle" class="q-mb-sm">
                 Excluir
               </q-tooltip>
@@ -47,8 +53,10 @@
 
 <script>
 import { defineComponent, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
+import { useQuasar } from 'quasar'
 
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
@@ -61,8 +69,10 @@ export default defineComponent({
   name: 'ListPage',
 
   setup () {
-    const { notifyError } = useNotify()
-    const { list } = useAPI()
+    const { notifySuccess, notifyError } = useNotify()
+    const { list, remove } = useAPI()
+    const router = useRouter()
+    const $q = useQuasar()
 
     const isLoading = ref(false)
     const categories = ref([])
@@ -96,23 +106,32 @@ export default defineComponent({
       getCategories()
     })
 
-    const onAdd = () => {
-
-    }
-
     const onEdit = (id) => {
-
+      router.push({ name: 'form-category', params: { id } })
     }
 
-    const onDelete = (id) => {
-
+    const onDelete = async (id, name) => {
+      $q.dialog({
+        title: 'Excluir categoria',
+        message: `Você realmente deseja excluir a categoria <b>${name}</b> ?`,
+        cancel: true,
+        persistent: true,
+        html: true
+      }).onOk(async () => {
+        try {
+          await remove('category', id)
+          notifySuccess()
+          getCategories()
+        } catch (error) {
+          notifyError(error.message)
+        }
+      })
     }
 
     return {
       columns,
       isLoading,
       categories,
-      onAdd,
       onEdit,
       onDelete
     }
