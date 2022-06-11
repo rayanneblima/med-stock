@@ -37,7 +37,7 @@
           lazy-rules
           :rules="[
             val => (val && val.length > 0) || 'Por favor, informe a senha.',
-            val => (val && (val.length > 0 && val.length > 5)) || 'A senha deve conter, no mínimo, 6 caracteres.'
+            val => (val && val.length >= 6) || 'A senha deve conter, no mínimo, 6 caracteres.'
           ]"
         />
 
