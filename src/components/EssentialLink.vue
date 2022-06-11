@@ -1,9 +1,8 @@
 <template>
   <q-item
     clickable
-    tag="a"
-    target="_blank"
-    :href="link"
+    :to="{ name: routeName }"
+    exact
   >
     <q-item-section
       v-if="icon"
@@ -14,7 +13,7 @@
 
     <q-item-section>
       <q-item-label>{{ title }}</q-item-label>
-      <q-item-label caption>{{ caption }}</q-item-label>
+      <q-item-label v-if="caption" caption>{{ caption }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
@@ -35,9 +34,9 @@ export default defineComponent({
       default: ''
     },
 
-    link: {
+    routeName: {
       type: String,
-      default: '#'
+      default: ''
     },
 
     icon: {
