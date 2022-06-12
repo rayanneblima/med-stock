@@ -5,10 +5,10 @@ export default function useAPI () {
   const { supabase } = useSupabase()
   const { user } = useAuthUser()
 
-  const list = async (table) => {
+  const list = async (table, select) => {
     const { data, error } = await supabase
       .from(table)
-      .select('*')
+      .select(select || '*')
 
     if (error) throw error
     return data

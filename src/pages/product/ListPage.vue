@@ -104,7 +104,7 @@ export default defineComponent({
       try {
         isLoading.value = true
 
-        const response = await list('products')
+        const response = await list('products', '*, categories (name)')
 
         products.value = response.map((product) => {
           const options = {
@@ -116,6 +116,7 @@ export default defineComponent({
           }
           const data = product.created_at
           product.created_at = new Date(data).toLocaleDateString('pt-BR', options)
+          product.category_name = product.categories.name
           return product
         })
       } catch (error) {
