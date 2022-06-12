@@ -3,7 +3,7 @@
     <div class="row">
       <q-table
         :rows="categories"
-        :columns="columns"
+        :columns="categoryColumns"
         row-key="id"
         class="full-width"
         :loading="isLoading"
@@ -69,16 +69,10 @@
 <script>
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
-import { useQuasar } from 'quasar'
-
-const columns = [
-  { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
-  { name: 'name', align: 'center', label: 'Nome', field: 'name', sortable: true },
-  { name: 'created_at', align: 'center', label: 'Criado em', field: 'created_at' },
-  { name: 'actions', align: 'center', label: 'Ações', field: 'actions' }
-]
+import { categoryColumns } from './table'
 
 export default defineComponent({
   name: 'ListPage',
@@ -144,7 +138,7 @@ export default defineComponent({
     }
 
     return {
-      columns,
+      categoryColumns,
       isLoading,
       categories,
       onEdit,
