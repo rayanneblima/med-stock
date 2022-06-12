@@ -12,7 +12,14 @@
         <template v-slot:top>
           <span class="text-h6">Categorias</span>
           <q-space />
-          <q-btn color="primary" icon="mdi-plus" label="Adicionar" outline :to="{ name: 'form-category' }" />
+          <q-btn
+            v-if="$q.platform.is.desktop"
+            color="primary"
+            icon="mdi-plus"
+            label="Adicionar"
+            outline
+            :to="{ name: 'form-category' }"
+          />
         </template>
 
         <template v-slot:body-cell-actions="props">
@@ -48,6 +55,14 @@
         </template>
       </q-table>
     </div>
+
+    <q-page-sticky
+      v-if="$q.platform.is.mobile"
+      position="bottom-right"
+      :offset="[18, 18]"
+    >
+      <q-btn fab icon="mdi-plus" color="primary" :to="{ name: 'form-category' }" />
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -81,7 +96,7 @@ export default defineComponent({
       try {
         isLoading.value = true
 
-        const response = await list('category')
+        const response = await list('categories')
 
         categories.value = response.map((category) => {
           const options = {
@@ -119,7 +134,7 @@ export default defineComponent({
         html: true
       }).onOk(async () => {
         try {
-          await remove('category', id)
+          await remove('categories', id)
           notifySuccess()
           getCategories()
         } catch (error) {
