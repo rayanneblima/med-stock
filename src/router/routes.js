@@ -19,7 +19,9 @@ const routes = [
     children: [
       { path: 'me', name: 'me', component: () => import('pages/MePage.vue') },
       { path: 'categories', name: 'categories', component: () => import('pages/category/ListPage.vue') },
-      { path: 'form-category/:id?', name: 'form-category', component: () => import('pages/category/FormPage.vue') }
+      { path: 'form-category/:id?', name: 'form-category', component: () => import('pages/category/FormPage.vue') },
+      { path: 'products', name: 'products', component: () => import('pages/product/ListPage.vue') },
+      { path: 'form-product/:id?', name: 'form-product', component: () => import('pages/product/FormPage.vue') }
     ],
     meta: { requiresAuth: true }
   },
