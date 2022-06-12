@@ -94,6 +94,15 @@
           ]"
         />
 
+        <q-input
+          v-if="isUpdate"
+          v-model="form.created_at"
+          label="Criado em"
+          type="text"
+          outline
+          disable
+        />
+
         <div class="flex q-gutter-x-md" :class="isDesktop ? 'justify-end' : 'justify-center'">
           <q-btn :label="isUpdate ? 'Atualizar' : 'Cadastrar'" type="submit" color="positive" :disable="!!errorClass" />
           <q-btn label="Cancelar" color="negative" :to="{ name: 'products' }" />
@@ -131,7 +140,8 @@ export default defineComponent({
       description: '',
       amount: 0,
       price: 0,
-      category_id: ''
+      category_id: '',
+      created_at: ''
     })
 
     const optionsCategory = ref([])
@@ -169,6 +179,17 @@ export default defineComponent({
         isLoading.value = true
         const product = await getById('products', route.params.id)
         form.value = product
+
+        const options = {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric'
+        }
+        const data = form.value.created_at
+        form.value.created_at = new Date(data).toLocaleDateString('pt-BR', options)
+        return product
       } catch (error) {
         notifyError(error.message)
       }
