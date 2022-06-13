@@ -89,21 +89,7 @@ export default defineComponent({
     const getCategories = async () => {
       try {
         isLoading.value = true
-
-        const response = await list('categories')
-
-        categories.value = response.map((category) => {
-          const options = {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric'
-          }
-          const data = category.created_at
-          category.created_at = new Date(data).toLocaleDateString('pt-BR', options)
-          return category
-        })
+        categories.value = await list('categories')
       } catch (error) {
         notifyError(error.message)
       }

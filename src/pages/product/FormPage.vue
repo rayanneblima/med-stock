@@ -66,6 +66,10 @@
           outline
           min="0"
           :disable="isUpdate && isLoading"
+          lazy-rules
+          :rules="[
+            val => !!val || 'Por favor, informe a quantidade do produto.'
+          ]"
         />
 
         <q-input
@@ -76,6 +80,10 @@
           min="0"
           prefix="R$"
           :disable="isUpdate && isLoading"
+          lazy-rules
+          :rules="[
+            val => !!val || 'Por favor, informe o preço do produto.'
+          ]"
         />
 
         <q-select
@@ -90,7 +98,7 @@
           :disable="isUpdate && isLoading"
           lazy-rules
           :rules="[
-            val => (val && val > 0) || 'Por favor, informe a categoria do produto.'
+            val => !!val || 'Por favor, informe a categoria do produto.'
           ]"
         />
 
@@ -115,9 +123,10 @@
 <script>
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
-import { useQuasar } from 'quasar'
+import { dateTimeFormat } from 'src/utils/format'
 
 export default defineComponent({
   name: 'FormPage',
@@ -177,22 +186,17 @@ export default defineComponent({
     const getProduct = async () => {
       try {
         isLoading.value = true
-        const product = await getById('products', route.params.id)
-        form.value = product
 
-        const options = {
-          year: 'numeric',
-          month: 'numeric',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric'
+        const product = await getById('products', route.params.id)
+
+        form.value = {
+          ...product,
+          created_at: dateTimeFormat(product.created_at)
         }
-        const data = form.value.created_at
-        form.value.created_at = new Date(data).toLocaleDateString('pt-BR', options)
-        return product
       } catch (error) {
         notifyError(error.message)
       }
+
       isLoading.value = false
     }
 

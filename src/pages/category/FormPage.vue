@@ -45,9 +45,10 @@
 <script>
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
-import { useQuasar } from 'quasar'
+import { dateTimeFormat } from 'src/utils/format'
 
 export default defineComponent({
   name: 'FormPage',
@@ -79,18 +80,11 @@ export default defineComponent({
     const getCategory = async () => {
       try {
         isLoading.value = true
-        const category = await getById('categories', route.params.id)
-        form.value = category
 
-        const options = {
-          year: 'numeric',
-          month: 'numeric',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric'
-        }
-        const data = form.value.created_at
-        form.value.created_at = new Date(data).toLocaleDateString('pt-BR', options)
+        const category = await getById('categories', route.params.id)
+
+        form.value = category
+        form.value.created_at = dateTimeFormat(category.created_at)
       } catch (error) {
         notifyError(error.message)
       }

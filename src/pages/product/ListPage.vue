@@ -100,24 +100,17 @@ export default defineComponent({
     const isLoading = ref(false)
     const products = ref([])
 
-    const getCategories = async () => {
+    const getProducts = async () => {
       try {
         isLoading.value = true
 
         const response = await list('products', '*, categories (name)')
 
         products.value = response.map((product) => {
-          const options = {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric'
+          return {
+            ...product,
+            category_name: product.categories.name
           }
-          const data = product.created_at
-          product.created_at = new Date(data).toLocaleDateString('pt-BR', options)
-          product.category_name = product.categories.name
-          return product
         })
       } catch (error) {
         notifyError(error.message)
@@ -127,7 +120,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      getCategories()
+      getProducts()
     })
 
     const onEdit = (id) => {
@@ -145,7 +138,7 @@ export default defineComponent({
         try {
           await remove('products', id)
           notifySuccess()
-          getCategories()
+          getProducts()
         } catch (error) {
           notifyError(error.message)
         }
