@@ -12,6 +12,16 @@
         class="col-md-8 col-sm-10 col-xs-10 q-gutter-y-md"
       >
         <q-input
+          v-model="img"
+          label="Imagem Principal"
+          type="file"
+          accept="image/*"
+          outline
+          stack-label
+          :disable="isUpdate && isLoading"
+        />
+
+        <q-input
           v-model="form.img_url"
           label="Imagem Principal"
           type="text"
@@ -134,7 +144,7 @@ export default defineComponent({
   setup () {
     const router = useRouter()
     const route = useRoute()
-    const { list, getById, post, update } = useAPI()
+    const { list, getById, post, update, uploadImg } = useAPI()
     const { notifySuccess, notifyError } = useNotify()
 
     const $q = useQuasar()
@@ -152,6 +162,8 @@ export default defineComponent({
       category_id: '',
       created_at: ''
     })
+
+    const img = ref([])
 
     const optionsCategory = ref([])
 
@@ -202,6 +214,11 @@ export default defineComponent({
 
     const onSubmit = async () => {
       try {
+        if (img.value.length > 0) {
+          const imgUrl = await uploadImg(img.value[0], 'products-img')
+          form.value.img_url = imgUrl
+        }
+
         isUpdate.value
           ? await update('products', form.value)
           : await post('products', form.value)
@@ -221,7 +238,8 @@ export default defineComponent({
       onSubmit,
       errorClass,
       handleErrorClass,
-      optionsCategory
+      optionsCategory,
+      img
     }
   }
 })

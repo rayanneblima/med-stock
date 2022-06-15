@@ -11,6 +11,16 @@
       >
         <template v-slot:top>
           <span class="text-h6">Produtos</span>
+          <q-btn
+            color="primary"
+            icon="mdi-store"
+            label="Minha Loja"
+            outline
+            size="sm"
+            rounded
+            class="q-ml-sm"
+            @click="redirectToStore"
+          />
           <q-space />
           <q-btn
             v-if="$q.platform.is.desktop"
@@ -86,6 +96,7 @@ import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
+import useAuthUser from 'src/composables/useAuthUser'
 import { productColumns } from './table'
 
 export default defineComponent({
@@ -93,7 +104,9 @@ export default defineComponent({
 
   setup () {
     const { notifySuccess, notifyError } = useNotify()
-    const { list, remove } = useAPI()
+    const { publicList, remove } = useAPI()
+    const { user } = useAuthUser()
+
     const router = useRouter()
     const $q = useQuasar()
 
@@ -104,7 +117,7 @@ export default defineComponent({
       try {
         isLoading.value = true
 
-        const response = await list('products', '*, categories (name)')
+        const response = await publicList('products', '*, categories (name)', user.value.id)
 
         products.value = response.map((product) => {
           return {
@@ -122,6 +135,11 @@ export default defineComponent({
     onMounted(() => {
       getProducts()
     })
+
+    const redirectToStore = () => {
+      const userId = user.value.id
+      router.push({ name: 'products-public', params: { userId } })
+    }
 
     const onEdit = (id) => {
       router.push({ name: 'form-product', params: { id } })
@@ -150,7 +168,8 @@ export default defineComponent({
       isLoading,
       products,
       onEdit,
-      onDelete
+      onDelete,
+      redirectToStore
     }
   }
 })
