@@ -84,7 +84,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (isLoggedIn) {
-        router.push({ name: 'me' })
+        router.push({ name: 'home' })
       }
     })
 
@@ -92,7 +92,7 @@ export default defineComponent({
       try {
         await login(form.value)
         notifySuccess()
-        router.push({ name: 'me' })
+        router.push({ name: 'home' })
       } catch (error) {
         notifyError(error.message)
       }
