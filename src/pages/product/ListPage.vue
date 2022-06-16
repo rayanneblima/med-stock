@@ -104,7 +104,7 @@ export default defineComponent({
 
   setup () {
     const { notifySuccess, notifyError } = useNotify()
-    const { publicList, remove } = useAPI()
+    const { list, remove } = useAPI()
     const { user } = useAuthUser()
 
     const router = useRouter()
@@ -117,7 +117,7 @@ export default defineComponent({
       try {
         isLoading.value = true
 
-        const response = await publicList('products', '*, categories (name)', user.value.id)
+        const response = await list('products', '*, categories (name)', user.value.id)
 
         products.value = response.map((product) => {
           return {
