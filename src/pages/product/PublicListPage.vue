@@ -3,7 +3,6 @@
     <div class="row">
       <q-table
         :rows="products"
-        :columns="productColumns"
         row-key="id"
         class="full-width"
         :loading="isLoading"
@@ -30,10 +29,10 @@
 
         <template v-slot:item="props">
           <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
-            <q-card>
+            <q-card id="product-card" @click="handleShowProductDetails(props.row)" v-ripple:primary>
               <q-card-section class="text-center">
                 <div class="text-h6">{{ props.row.name }}</div>
-                <div class="text-subtitle-2">{{ currencyFormat(props.row.price) }}</div>
+                <div class="text-subtitle2">{{ currencyFormat(props.row.price) }}</div>
                 <div>
                   <q-img
                     v-if="props.row.img_url"
@@ -69,6 +68,12 @@
     >
       <q-btn fab icon="mdi-plus" color="primary" :to="{ name: 'form-product' }" />
     </q-page-sticky>
+
+    <dialog-product-details
+      :showDialog="showProductDetails"
+      :product="clickedProduct"
+      @hide-dialog="showProductDetails = false"
+    />
   </q-page>
 </template>
 
@@ -78,10 +83,14 @@ import { useRoute } from 'vue-router'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
 import { currencyFormat } from 'src/utils/format'
-import { productColumns } from './table'
+import DialogProductDetails from 'components/DialogProductDetails'
 
 export default defineComponent({
   name: 'PublicListPage',
+
+  components: {
+    DialogProductDetails
+  },
 
   setup () {
     const { notifyError } = useNotify()
@@ -92,6 +101,8 @@ export default defineComponent({
     const filter = ref('')
     const isLoading = ref(false)
     const products = ref([])
+    const clickedProduct = ref({})
+    const showProductDetails = ref(false)
 
     const getProducts = async (userId) => {
       try {
@@ -110,9 +121,16 @@ export default defineComponent({
       }
     })
 
+    const handleShowProductDetails = (product) => {
+      clickedProduct.value = product
+      showProductDetails.value = true
+    }
+
     return {
-      productColumns,
       filter,
+      showProductDetails,
+      clickedProduct,
+      handleShowProductDetails,
       isLoading,
       products,
       currencyFormat
@@ -120,3 +138,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+#product-card:hover {
+  filter: brightness(0.9);
+  transition: all .3s ease-in-out;
+}
+</style>
