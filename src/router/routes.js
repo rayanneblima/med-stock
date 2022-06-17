@@ -18,11 +18,12 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'me', name: 'me', component: () => import('pages/MePage.vue') },
+      { path: 'home', name: 'home', component: () => import('pages/HomePage.vue') },
       { path: 'categories', name: 'categories', component: () => import('pages/category/ListPage.vue') },
       { path: 'form-category/:id?', name: 'form-category', component: () => import('pages/category/FormPage.vue') },
       { path: 'products', name: 'products', component: () => import('pages/product/ListPage.vue') },
-      { path: 'form-product/:id?', name: 'form-product', component: () => import('pages/product/FormPage.vue') }
+      { path: 'form-product/:id?', name: 'form-product', component: () => import('pages/product/FormPage.vue') },
+      { path: 'configurations', name: 'configurations', component: () => import('pages/StoreConfigPage.vue') }
     ],
     meta: { requiresAuth: true }
   },
