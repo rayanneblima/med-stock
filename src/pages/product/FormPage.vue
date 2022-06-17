@@ -121,7 +121,7 @@
           disable
         />
 
-        <div class="flex q-gutter-x-md" :class="isDesktop ? 'justify-end' : 'justify-center'">
+        <div class="flex q-gutter-x-md" :class="$q.platform.is.desktop ? 'justify-end' : 'justify-center'">
           <q-btn :label="isUpdate ? 'Atualizar' : 'Cadastrar'" type="submit" color="positive" :disable="!!errorClass" />
           <q-btn label="Cancelar" color="negative" :to="{ name: 'products' }" />
         </div>
@@ -133,7 +133,6 @@
 <script>
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useQuasar } from 'quasar'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
 import { dateTimeFormat } from 'src/utils/format'
@@ -146,10 +145,6 @@ export default defineComponent({
     const route = useRoute()
     const { list, getById, post, update, uploadImg } = useAPI()
     const { notifySuccess, notifyError } = useNotify()
-
-    const $q = useQuasar()
-
-    const isDesktop = computed(() => $q.platform.is.desktop)
 
     const isLoading = ref(false)
 
@@ -214,7 +209,7 @@ export default defineComponent({
 
     const onSubmit = async () => {
       try {
-        if (img.value.length > 0) {
+        if (img.value.length) {
           const imgUrl = await uploadImg(img.value[0], 'products-img')
           form.value.img_url = imgUrl
         }
@@ -232,7 +227,6 @@ export default defineComponent({
 
     return {
       form,
-      isDesktop,
       isLoading,
       isUpdate,
       onSubmit,
