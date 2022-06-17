@@ -3,7 +3,8 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>
-          Vue3 + Quasar + Supabase
+          Quasar Estoque
+          <span class="text-bold" v-if="storeConfigs.name"> - {{storeConfigs.name}}</span>
         </q-toolbar-title>
 
       </q-toolbar>
@@ -16,13 +17,22 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
+import useAPI from 'src/composables/useAPI'
 
 export default defineComponent({
   name: 'LoginLayout',
 
   setup () {
-    return { }
+    const { storeConfigs, setStoreConfigs } = useAPI()
+
+    onMounted(() => {
+      setStoreConfigs()
+    })
+
+    return {
+      storeConfigs
+    }
   }
 })
 </script>

@@ -8,7 +8,7 @@
       v-if="icon"
       avatar
     >
-      <q-icon :name="icon" />
+      <q-icon :name="icon" color="secondary" />
     </q-item-section>
 
     <q-item-section>
@@ -23,6 +23,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'EssentialLink',
+
   props: {
     title: {
       type: String,

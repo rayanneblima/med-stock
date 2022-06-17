@@ -13,6 +13,7 @@
 
         <q-toolbar-title>
           Quasar Estoque
+          <span class="text-bold" v-if="storeConfigs.name"> - {{storeConfigs.name}}</span>
         </q-toolbar-title>
 
         <q-btn-dropdown flat icon="person">
@@ -57,19 +58,20 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-import useAuthUser from 'src/composables/useAuthUser'
-import useNotify from 'src/composables/useNotify'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import useAuthUser from 'src/composables/useAuthUser'
+import useNotify from 'src/composables/useNotify'
+import useAPI from 'src/composables/useAPI'
+import EssentialLink from 'components/EssentialLink.vue'
 
 const linksList = [
   {
     title: 'Home',
     caption: '',
     icon: 'mdi-home-outline',
-    routeName: 'me'
+    routeName: 'home'
   },
   {
     title: 'Categorias',
@@ -82,6 +84,12 @@ const linksList = [
     caption: '',
     icon: 'mdi-archive',
     routeName: 'products'
+  },
+  {
+    title: 'Configurações',
+    caption: '',
+    icon: 'mdi-cog',
+    routeName: 'configurations'
   }
 ]
 
@@ -96,10 +104,15 @@ export default defineComponent({
     const router = useRouter()
     const { logout } = useAuthUser()
     const { notifyDefault } = useNotify()
+    const { storeConfigs, setStoreConfigs } = useAPI()
 
     const $q = useQuasar()
 
     const leftDrawerOpen = ref(false)
+
+    onMounted(() => {
+      setStoreConfigs()
+    })
 
     const onLogout = async () => {
       $q.dialog({
@@ -120,6 +133,7 @@ export default defineComponent({
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
+      storeConfigs,
       onLogout
     }
   }
