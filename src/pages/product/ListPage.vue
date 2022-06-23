@@ -21,6 +21,16 @@
             class="q-ml-sm"
             @click="redirectToStore"
           />
+          <q-btn
+            color="secondary"
+            icon="mdi-content-copy"
+            label="Copiar link"
+            outline
+            size="sm"
+            rounded
+            class="q-ml-sm"
+            @click="copyPublicStoreUrl"
+          />
           <q-space />
           <q-btn
             v-if="$q.platform.is.desktop"
@@ -93,7 +103,7 @@
 <script>
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useQuasar } from 'quasar'
+import { useQuasar, openURL, copyToClipboard } from 'quasar'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
 import useAuthUser from 'src/composables/useAuthUser'
@@ -138,7 +148,16 @@ export default defineComponent({
 
     const redirectToStore = () => {
       const userId = user.value.id
-      router.push({ name: 'products-public', params: { userId } })
+      const externalLink = router.resolve({ name: 'products-public', params: { userId } })
+      openURL(window.origin + externalLink.href)
+    }
+
+    const copyPublicStoreUrl = () => {
+      const userId = user.value.id
+      const externalLink = router.resolve({ name: 'products-public', params: { userId } })
+      copyToClipboard(window.origin + externalLink.href)
+        .then(() => notifySuccess('Copiado!'))
+        .catch((error) => notifyError(error.message))
     }
 
     const onEdit = (id) => {
@@ -169,7 +188,8 @@ export default defineComponent({
       products,
       onEdit,
       onDelete,
-      redirectToStore
+      redirectToStore,
+      copyPublicStoreUrl
     }
   }
 })
