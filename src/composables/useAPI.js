@@ -138,22 +138,25 @@ export default function useAPI () {
   }
 
   const setStoreConfigs = async () => {
-    const userId = user?.value?.id || route.params.userId
+    const userId = route.params.userId || user?.value?.id
 
     $q.loading.show()
 
-    const { data, error } = await supabase
-      .from('store_configs')
-      .select('*')
-      .eq('user_id', userId)
+    if (userId) {
+      const { data, error } = await supabase
+        .from('store_configs')
+        .select('*')
+        .eq('user_id', userId)
 
-    if (error) throw error
-    if (data) {
-      storeConfigs.value = data[0]
-      setBrandColors({
-        primary: storeConfigs.value.primary_color,
-        secondary: storeConfigs.value.secondary_color
-      })
+      if (error) throw error
+
+      if (data.length) {
+        storeConfigs.value = data[0]
+        setBrandColors({
+          primary: storeConfigs.value.primary_color,
+          secondary: storeConfigs.value.secondary_color
+        })
+      }
     }
 
     $q.loading.hide()
