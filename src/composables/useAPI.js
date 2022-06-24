@@ -30,11 +30,12 @@ export default function useAPI () {
     return data
   }
 
-  const publicList = async (table, userId) => {
+  const publicList = async (table, userId, columnFilter = '', filterValue = '') => {
     const { data, error } = await supabase
       .from(table)
       .select('*')
       .eq('user_id', userId)
+      .eq(columnFilter, filterValue)
 
     if (error) throw error
     return data
@@ -54,7 +55,7 @@ export default function useAPI () {
     const { data, error } = await supabase
       .from(table)
       .select('*')
-      .eq('user_id', user.value.id)
+      .eq('user_id', user.value.id || id)
 
     if (error) throw error
     return data[0]

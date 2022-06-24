@@ -79,7 +79,7 @@ export default defineComponent({
 
   setup () {
     const { notifySuccess, notifyError } = useNotify()
-    const { list, remove } = useAPI()
+    const { getByUserId, remove } = useAPI()
     const router = useRouter()
     const $q = useQuasar()
 
@@ -89,7 +89,7 @@ export default defineComponent({
     const getCategories = async () => {
       try {
         isLoading.value = true
-        categories.value = await list('categories')
+        categories.value = await getByUserId('categories')
       } catch (error) {
         notifyError(error.message)
       }

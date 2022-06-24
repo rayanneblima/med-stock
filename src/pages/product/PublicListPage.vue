@@ -11,7 +11,23 @@
         grid
       >
         <template v-slot:top>
+          <q-select
+            outlined
+            v-model="categoryId"
+            :options="categories"
+            option-label="name"
+            option-value="id"
+            label="Categorias"
+            class="col-12 q-mb-md"
+            dense
+            clearable
+            map-options
+            emit-value
+            @update:model-value="getProducts"
+          />
+
           <span class="text-h6">Produtos</span>
+
           <q-space />
           <q-input
             v-model="filter"
@@ -100,14 +116,29 @@ export default defineComponent({
 
     const filter = ref('')
     const isLoading = ref(false)
+    const categories = ref([])
+    const categoryId = ref('')
     const products = ref([])
     const clickedProduct = ref({})
     const showProductDetails = ref(false)
 
-    const getProducts = async (userId) => {
+    const getCategories = async () => {
       try {
         isLoading.value = true
-        products.value = await publicList('products', userId)
+        categories.value = await publicList('categories', route.params.userId)
+      } catch (error) {
+        notifyError(error.message)
+      }
+
+      isLoading.value = false
+    }
+
+    const getProducts = async () => {
+      try {
+        isLoading.value = true
+        products.value = categoryId.value
+          ? await publicList('products', route.params.userId, 'category_id', categoryId.value)
+          : await publicList('products', route.params.userId)
       } catch (error) {
         notifyError(error.message)
       }
@@ -117,7 +148,8 @@ export default defineComponent({
 
     onMounted(() => {
       if (route.params.userId) {
-        getProducts(route.params.userId)
+        getCategories()
+        getProducts()
       }
     })
 
@@ -133,7 +165,10 @@ export default defineComponent({
       handleShowProductDetails,
       isLoading,
       products,
-      currencyFormat
+      currencyFormat,
+      categories,
+      getProducts,
+      categoryId
     }
   }
 })
