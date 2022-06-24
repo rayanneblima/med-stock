@@ -28,6 +28,7 @@
       <q-card-actions align="right">
         <q-btn flat label="Cancelar" color="negative" v-close-popup @click="sendEmitOnClose" />
         <q-btn
+          v-if="storeConfigs.whatsapp_number"
           flat
           label="Enviar pedido"
           color="green-7"
@@ -42,6 +43,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { openURL } from 'quasar'
+import useAPI from 'src/composables/useAPI'
 import { currencyFormat } from 'src/utils/format'
 
 export default defineComponent({
@@ -64,22 +66,24 @@ export default defineComponent({
   },
 
   setup (props, { emit }) {
+    const { storeConfigs } = useAPI()
+
     const sendEmitOnClose = () => {
       emit('hideDialog')
     }
 
     const sendOrderToWpp = () => {
-      const phoneToReceiveOrder = ''
       const message = `Olá, tenho interesse no produto: **${props.product.name}**.`
 
-      const link = encodeURI(`https://api.whatsapp.com/send?phone=55${phoneToReceiveOrder}&text=${message} - ${currencyFormat(props.product.price)}`)
+      const link = encodeURI(`https://api.whatsapp.com/send?phone=55${storeConfigs.value.whatsapp_number}&text=${message} - ${currencyFormat(props.product.price)}`)
       openURL(link)
     }
 
     return {
       sendEmitOnClose,
       currencyFormat,
-      sendOrderToWpp
+      sendOrderToWpp,
+      storeConfigs
     }
   }
 })
