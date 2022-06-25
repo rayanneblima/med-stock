@@ -14,6 +14,10 @@ npm install
 quasar dev
 ```
 
+### Quasar Upgrade packages
+```bash
+quasar upgrade -i
+```
 
 ### Lint the files
 ```bash
