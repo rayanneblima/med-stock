@@ -143,7 +143,7 @@ export default defineComponent({
   setup () {
     const router = useRouter()
     const route = useRoute()
-    const { getByUserId, getById, post, update, uploadImg } = useAPI()
+    const { publicList, getById, post, update, uploadImg } = useAPI()
     const { notifySuccess, notifyError } = useNotify()
 
     const isLoading = ref(false)
@@ -182,7 +182,7 @@ export default defineComponent({
     const getCategories = async () => {
       try {
         isLoading.value = true
-        const categoriesList = await getByUserId('categories')
+        const categoriesList = await publicList('categories')
         optionsCategory.value = categoriesList
       } catch (error) {
         notifyError(error.message)

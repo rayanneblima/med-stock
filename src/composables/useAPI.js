@@ -30,15 +30,19 @@ export default function useAPI () {
     return data
   }
 
-  const publicList = async (table, userId, columnFilter = '', filterValue = '') => {
-    const { data, error } = await supabase
-      .from(table)
-      .select('*')
-      .eq('user_id', userId)
-      .eq(columnFilter, filterValue)
+  const publicList = async (table, columnFilter = '', filterValue = '') => {
+    const userId = route.params.userId || user?.value?.id
 
-    if (error) throw error
-    return data
+    if (userId) {
+      const { data, error } = await supabase
+        .from(table)
+        .select('*')
+        .eq('user_id', userId)
+        .eq(columnFilter, filterValue)
+
+      if (error) throw error
+      return data
+    }
   }
 
   const getById = async (table, id) => {
