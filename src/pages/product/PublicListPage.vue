@@ -2,12 +2,14 @@
   <q-page padding>
     <div class="row">
       <q-table
-        :rows="products"
-        row-key="id"
         class="full-width"
-        :loading="isLoading"
+        row-key="id"
         loading-label="Buscando registros..."
+        :rows="products"
+        :loading="isLoading"
         :filter="filter"
+        v-model:pagination="initialPagination"
+        hide-pagination
         grid
       >
         <template v-slot:top>
@@ -75,6 +77,16 @@
           <q-inner-loading showing color="primary" />
         </template>
       </q-table>
+
+      <div class="col-12 q-pa-md">
+        <q-pagination
+          v-model="initialPagination.page"
+          :max="pagesNumber"
+          class="flex-center"
+          direction-links
+          @update:model-value="scrollToTop"
+        />
+      </div>
     </div>
 
     <q-page-sticky
@@ -94,12 +106,13 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
 import { currencyFormat } from 'src/utils/format'
 import DialogProductDetails from 'components/DialogProductDetails'
+import { initialPagination } from './table'
 
 export default defineComponent({
   name: 'PublicListPage',
@@ -125,7 +138,7 @@ export default defineComponent({
     const getCategories = async () => {
       try {
         isLoading.value = true
-        categories.value = await publicList('categories', route.params.userId)
+        categories.value = await publicList('categories')
       } catch (error) {
         notifyError(error.message)
       }
@@ -137,8 +150,8 @@ export default defineComponent({
       try {
         isLoading.value = true
         products.value = categoryId.value
-          ? await publicList('products', route.params.userId, 'category_id', categoryId.value)
-          : await publicList('products', route.params.userId)
+          ? await publicList('products', 'category_id', categoryId.value)
+          : await publicList('products')
       } catch (error) {
         notifyError(error.message)
       }
@@ -158,6 +171,10 @@ export default defineComponent({
       showProductDetails.value = true
     }
 
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
     return {
       filter,
       showProductDetails,
@@ -168,7 +185,10 @@ export default defineComponent({
       currencyFormat,
       categories,
       getProducts,
-      categoryId
+      categoryId,
+      initialPagination,
+      scrollToTop,
+      pagesNumber: computed(() => Math.ceil(products.value.length / initialPagination.value.rowPerPage))
     }
   }
 })

@@ -1,4 +1,5 @@
 import { currencyFormat } from 'src/utils/format'
+import { ref } from 'vue'
 
 const productColumns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
@@ -10,6 +11,12 @@ const productColumns = [
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions' }
 ]
 
+const initialPagination = ref({
+  page: 1,
+  rowPerPage: 5
+})
+
 export {
-  productColumns
+  productColumns,
+  initialPagination
 }
