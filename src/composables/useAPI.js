@@ -8,6 +8,7 @@ import useBrandConfigs from './useBrandConfigs'
 const storeConfigs = ref({
   name: '',
   logo_url: '',
+  parallax_url: '',
   whatsapp_number: '',
   primary_color: '',
   secondary_color: ''

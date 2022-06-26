@@ -50,6 +50,17 @@
           ]"
         />
 
+        <q-file
+          v-model="parallax"
+          label="Imagem do Banner"
+          accept="image/*"
+          :disable="isLoading"
+        >
+          <template v-slot:prepend>
+            <q-icon name="mdi-paperclip" />
+          </template>
+        </q-file>
+
         <div class="row justify-center q-gutter-md q-pa-md">
           <q-field borderless class="col-xs-12 col-sm-5" label="Cor Principal">
             <q-color v-model="form.primary_color" class="q-mt-md" />
@@ -88,12 +99,14 @@ export default defineComponent({
       id: '',
       name: '',
       logo_url: '',
+      parallax_url: '',
       whatsapp_number: '',
       primary_color: getDefaultBrandColor('primary'),
       secondary_color: getDefaultBrandColor('secondary')
     })
 
     const logo = ref([])
+    const parallax = ref([])
 
     onMounted(() => {
       getStoreConfigs()
@@ -122,6 +135,11 @@ export default defineComponent({
           form.value.logo_url = logoUrl
         }
 
+        if (parallax.value.name) {
+          const parallaxUrl = await uploadImg(parallax.value, 'store-parallax-img')
+          form.value.parallax_url = parallaxUrl
+        }
+
         await upsert('store_configs', form.value)
 
         setBrandColors({
@@ -139,7 +157,8 @@ export default defineComponent({
       form,
       isLoading,
       onSubmit,
-      logo
+      logo,
+      parallax
     }
   }
 })

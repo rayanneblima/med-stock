@@ -46,7 +46,7 @@
         </template>
 
         <template v-slot:item="props">
-          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
+          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-3">
             <q-card id="product-card" @click="handleShowProductDetails(props.row)" v-ripple:primary>
               <q-card-section class="text-center">
                 <div class="text-h6">{{ props.row.name }}</div>
@@ -64,6 +64,16 @@
                 </div>
               </q-card-section>
             </q-card>
+          </div>
+
+          <div class="col-12 q-pa-md" v-if="props.rowIndex === 3 && storeConfigs.parallax_url">
+            <q-parallax :height="200" :speed="0.5">
+              <template v-slot:media>
+                <img :src="storeConfigs.parallax_url" id="parallax-store">
+              </template>
+
+              <h3 class="text-white">{{ storeConfigs.name }}</h3>
+            </q-parallax>
           </div>
         </template>
 
@@ -123,7 +133,7 @@ export default defineComponent({
 
   setup () {
     const { notifyError } = useNotify()
-    const { publicList } = useAPI()
+    const { publicList, storeConfigs } = useAPI()
 
     const route = useRoute()
 
@@ -188,7 +198,8 @@ export default defineComponent({
       categoryId,
       initialPagination,
       scrollToTop,
-      pagesNumber: computed(() => Math.ceil(products.value.length / initialPagination.value.rowPerPage))
+      storeConfigs,
+      pagesNumber: computed(() => Math.ceil(products.value.length / initialPagination.value.rowsPerPage))
     }
   }
 })
@@ -198,5 +209,9 @@ export default defineComponent({
 #product-card:hover {
   filter: brightness(0.9);
   transition: all .3s ease-in-out;
+}
+
+#parallax-store {
+  filter: brightness(0.8);
 }
 </style>
