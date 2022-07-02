@@ -62,11 +62,11 @@
         </q-file>
 
         <div class="row justify-center q-gutter-md q-pa-md">
-          <q-field borderless class="col-xs-12 col-sm-5" label="Cor Principal">
-            <q-color v-model="form.primary_color" class="q-mt-md" />
+          <q-field borderless class="col-xs-12 col-sm-5 col-lg-3" label="Cor Principal">
+            <q-color v-model="form.primary_color" class="full-width q-mt-md" />
           </q-field>
-          <q-field borderless class="col-xs-12 col-sm-5" label="Cor Secundária">
-            <q-color v-model="form.secondary_color" class="q-mt-md" />
+          <q-field borderless class="col-xs-12 col-sm-5 col-lg-3" label="Cor Secundária">
+            <q-color v-model="form.secondary_color" class="full-width q-mt-md" />
           </q-field>
         </div>
 
