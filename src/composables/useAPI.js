@@ -46,6 +46,23 @@ export default function useAPI () {
     }
   }
 
+  const fetchCount = async (table) => {
+    const userId = user?.value?.id
+
+    if (userId) {
+      const { data, count, error } = await supabase
+        .from(table)
+        .select('*', { count: 'exact' })
+        .eq('user_id', userId)
+
+      if (error) throw error
+      return {
+        data,
+        count
+      }
+    }
+  }
+
   const getById = async (table, id) => {
     const { data, error } = await supabase
       .from(table)
@@ -171,6 +188,7 @@ export default function useAPI () {
   return {
     list,
     publicList,
+    fetchCount,
     getById,
     getByUserId,
     post,

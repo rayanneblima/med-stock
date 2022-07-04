@@ -1,24 +1,33 @@
 <template>
-  <q-page class="flex flex-center">
-    <div v-if="user">
-      <p>Olá, {{ user.user_metadata.name }}</p>
+  <q-page padding>
+    <div class="row q-gutter-md">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <DashboardCard
+          table="categories"
+          label="Categorias"
+          icon="mdi-shape-outline"
+        />
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <DashboardCard
+          table="products"
+          label="Produtos"
+          icon="mdi-archive"
+        />
+      </div>
     </div>
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import useAuthUser from 'src/composables/useAuthUser'
+import { defineComponent, defineAsyncComponent } from 'vue'
 
 export default defineComponent({
   name: 'HomePage',
 
-  setup () {
-    const { user } = useAuthUser()
-
-    return {
-      user
-    }
+  components: {
+    DashboardCard: defineAsyncComponent(() => import('components/DashboardCard.vue'))
   }
 })
 </script>
