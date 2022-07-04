@@ -46,35 +46,40 @@
         </template>
 
         <template v-slot:item="props">
-          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-3">
-            <q-card id="product-card" @click="handleShowProductDetails(props.row)" v-ripple:primary>
-              <q-card-section class="text-center">
-                <div class="text-h6">{{ props.row.name }}</div>
-                <div class="text-subtitle2">{{ currencyFormat(props.row.price) }}</div>
-                <div>
-                  <q-img
-                    v-if="props.row.img_url"
-                    :src="props.row.img_url"
-                    :ratio="4/3"
-                    spinner-color="primary"
-                    spinner-size="20px"
-                    @error="props.row.img_url = ''"
-                  />
-                  <q-icon v-else name="mdi-image-off" size="20px" />
-                </div>
-              </q-card-section>
-            </q-card>
-          </div>
+          <transition-group
+            enter-active-class="animated fadeInLeft"
+            leave-active-class="animated fadeOutRight"
+          >
+            <div class="q-pa-xs col-xs-12 col-sm-6 col-md-3" key="card">
+              <q-card id="product-card" @click="handleShowProductDetails(props.row)" v-ripple:primary>
+                <q-card-section class="text-center">
+                  <div class="text-h6">{{ props.row.name }}</div>
+                  <div class="text-subtitle2">{{ currencyFormat(props.row.price) }}</div>
+                  <div>
+                    <q-img
+                      v-if="props.row.img_url"
+                      :src="props.row.img_url"
+                      :ratio="4/3"
+                      spinner-color="primary"
+                      spinner-size="20px"
+                      @error="props.row.img_url = ''"
+                    />
+                    <q-icon v-else name="mdi-image-off" size="20px" />
+                  </div>
+                </q-card-section>
+              </q-card>
+            </div>
 
-          <div class="col-12 q-pa-md" v-if="props.rowIndex === 3 && storeConfigs.parallax_url">
-            <q-parallax :height="200" :speed="0.5">
-              <template v-slot:media>
-                <img :src="storeConfigs.parallax_url" id="parallax-store">
-              </template>
+            <div class="col-12 q-pa-md" v-if="props.rowIndex === 3 && storeConfigs.parallax_url" key="parallax">
+              <q-parallax :height="200" :speed="0.5">
+                <template v-slot:media>
+                  <img :src="storeConfigs.parallax_url" id="parallax-store">
+                </template>
 
-              <h3 class="text-white">{{ storeConfigs.name }}</h3>
-            </q-parallax>
-          </div>
+                <h3 class="text-white">{{ storeConfigs.name }}</h3>
+              </q-parallax>
+            </div>
+          </transition-group>
         </template>
 
         <template v-slot:no-data v-if="!isLoading">
