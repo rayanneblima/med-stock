@@ -167,7 +167,7 @@ export default defineComponent({
     const onDelete = async (id, name) => {
       $q.dialog({
         title: 'Excluir categoria',
-        message: `Você realmente deseja excluir a categoria <b>${name}</b> ?`,
+        message: `Você realmente deseja excluir o produto <b>${name}</b> ?`,
         cancel: true,
         persistent: true,
         html: true

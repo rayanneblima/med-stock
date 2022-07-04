@@ -114,7 +114,7 @@
 
         <q-input
           v-if="isUpdate"
-          v-model="form.created_at"
+          v-model="createdAt"
           label="Criado em"
           type="text"
           outline
@@ -154,9 +154,9 @@ export default defineComponent({
       description: '',
       amount: 0,
       price: 0,
-      category_id: '',
-      created_at: ''
+      category_id: ''
     })
+    const createdAt = ref('')
 
     const img = ref([])
 
@@ -196,10 +196,8 @@ export default defineComponent({
 
         const product = await getById('products', route.params.id)
 
-        form.value = {
-          ...product,
-          created_at: dateTimeFormat(product.created_at)
-        }
+        form.value = product
+        createdAt.value = dateTimeFormat(product.created_at)
       } catch (error) {
         notifyError(error.message)
       }

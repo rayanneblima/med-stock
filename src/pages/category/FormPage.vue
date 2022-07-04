@@ -26,7 +26,7 @@
 
         <q-input
           v-if="isUpdate"
-          v-model="form.created_at"
+          v-model="createdAt"
           label="Criado em"
           type="text"
           outline
@@ -65,9 +65,9 @@ export default defineComponent({
 
     const isLoading = ref(false)
     const form = ref({
-      name: '',
-      created_at: ''
+      name: ''
     })
+    const createdAt = ref('')
 
     const isUpdate = computed(() => route.params.id)
 
@@ -84,7 +84,7 @@ export default defineComponent({
         const category = await getById('categories', route.params.id)
 
         form.value = category
-        form.value.created_at = dateTimeFormat(category.created_at)
+        createdAt.value = dateTimeFormat(category.created_at)
       } catch (error) {
         notifyError(error.message)
       }
@@ -106,6 +106,7 @@ export default defineComponent({
 
     return {
       form,
+      createdAt,
       isDesktop,
       isLoading,
       isUpdate,
