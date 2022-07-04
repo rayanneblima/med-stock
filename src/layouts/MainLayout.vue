@@ -16,6 +16,8 @@
           <span class="text-bold" v-if="storeConfigs.name"> - {{storeConfigs.name}}</span>
         </q-toolbar-title>
 
+        <ThemeToggle />
+
         <q-btn-dropdown flat icon="person">
           <q-list>
             <q-item clickable v-close-popup @click="onLogout">
@@ -65,6 +67,7 @@ import useAuthUser from 'src/composables/useAuthUser'
 import useNotify from 'src/composables/useNotify'
 import useAPI from 'src/composables/useAPI'
 import EssentialLink from 'components/EssentialLink.vue'
+import ThemeToggle from 'components/ThemeToggle.vue'
 
 const linksList = [
   {
@@ -97,7 +100,8 @@ export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    EssentialLink,
+    ThemeToggle
   },
 
   setup () {
