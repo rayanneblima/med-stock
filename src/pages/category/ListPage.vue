@@ -1,68 +1,12 @@
 <template>
   <q-page padding>
-    <div class="row">
-      <q-table
-        :rows="categories"
-        :columns="categoryColumns"
-        row-key="id"
-        class="full-width"
-        :loading="isLoading"
-        loading-label="Buscando registros..."
-      >
-        <template v-slot:top>
-          <span class="text-h6">Categorias</span>
-          <q-space />
-          <q-btn
-            v-if="$q.platform.is.desktop"
-            color="primary"
-            icon="mdi-plus"
-            label="Adicionar"
-            outline
-            :to="{ name: 'form-category' }"
-          />
-        </template>
-
-        <template v-slot:body-cell-actions="props">
-          <q-td :props="props" class="q-gutter-x-sm">
-            <q-btn color="info" icon="mdi-pencil-outline" outline size="sm" @click="onEdit(props.key)">
-              <q-tooltip anchor="top middle" self="center middle">
-                Editar
-              </q-tooltip>
-            </q-btn>
-
-            <q-btn
-              color="negative"
-              icon="mdi-delete-outline"
-              size="sm"
-              outline
-              @click="onDelete(props.key, props.row.name)"
-            >
-              <q-tooltip anchor="top middle" self="center middle" class="q-mb-sm">
-                Excluir
-              </q-tooltip>
-            </q-btn>
-          </q-td>
-        </template>
-
-        <template v-slot:no-data v-if="!isLoading">
-          <div class="full-width row flex-center text-primary q-gutter-sm">
-            <span>Nenhum registro encontrado.</span>
-          </div>
-        </template>
-
-        <template v-slot:loading>
-          <q-inner-loading showing color="primary" />
-        </template>
-      </q-table>
-    </div>
-
-    <q-page-sticky
-      v-if="$q.platform.is.mobile"
-      position="bottom-right"
-      :offset="[18, 18]"
-    >
-      <q-btn fab icon="mdi-plus" color="primary" :to="{ name: 'form-category' }" />
-    </q-page-sticky>
+    <DataTable
+      :rowsData="categories"
+      :colsData="categoryColumns"
+      :isLoading="isLoading"
+      labelTitle="Categorias"
+      routeName="form-category"
+    />
   </q-page>
 </template>
 
@@ -73,9 +17,12 @@ import { useQuasar } from 'quasar'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
 import { categoryColumns } from './table'
+import DataTable from 'components/DataTable.vue'
 
 export default defineComponent({
   name: 'ListPage',
+
+  components: { DataTable },
 
   setup () {
     const { notifySuccess, notifyError } = useNotify()

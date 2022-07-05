@@ -1,102 +1,50 @@
 <template>
   <q-page padding>
-    <div class="row">
-      <q-table
-        :rows="products"
-        :columns="productColumns"
-        row-key="id"
-        class="full-width"
-        :loading="isLoading"
-        loading-label="Buscando registros..."
-      >
-        <template v-slot:top>
-          <span class="text-h6">Produtos</span>
-          <q-btn
-            color="primary"
-            icon="mdi-store"
-            label="Minha Loja"
-            outline
-            size="sm"
-            rounded
-            class="q-ml-sm"
-            @click="redirectToStore"
-          />
-          <q-btn
-            color="secondary"
-            icon="mdi-content-copy"
-            label="Copiar link"
-            outline
-            size="sm"
-            rounded
-            class="q-ml-sm"
-            @click="copyPublicStoreUrl"
-          />
-          <q-space />
-          <q-btn
-            v-if="$q.platform.is.desktop"
-            color="primary"
-            icon="mdi-plus"
-            label="Adicionar"
-            outline
-            :to="{ name: 'form-product' }"
-          />
-        </template>
-
-        <template v-slot:body-cell-img_url="props">
-          <q-td :props="props" :class="props.row.img_url && 'product__img'">
-            <q-img
-              v-if="props.row.img_url"
-              :src="props.row.img_url"
-              :ratio="16/9"
-              spinner-color="primary"
-              spinner-size="20px"
-              @error="props.row.img_url = ''"
-            />
-            <q-icon v-else name="mdi-image-off" size="20px" />
-          </q-td>
-        </template>
-
-        <template v-slot:body-cell-actions="props">
-          <q-td :props="props" class="q-gutter-x-sm">
-            <q-btn color="info" icon="mdi-pencil-outline" outline size="sm" @click="onEdit(props.key)">
-              <q-tooltip anchor="top middle" self="center middle">
-                Editar
-              </q-tooltip>
-            </q-btn>
-
-            <q-btn
-              color="negative"
-              icon="mdi-delete-outline"
-              size="sm"
-              outline
-              @click="onDelete(props.key, props.row.name)"
-            >
-              <q-tooltip anchor="top middle" self="center middle" class="q-mb-sm">
-                Excluir
-              </q-tooltip>
-            </q-btn>
-          </q-td>
-        </template>
-
-        <template v-slot:no-data v-if="!isLoading">
-          <div class="full-width row flex-center text-primary q-gutter-sm">
-            <span>Nenhum registro encontrado.</span>
-          </div>
-        </template>
-
-        <template v-slot:loading>
-          <q-inner-loading showing color="primary" />
-        </template>
-      </q-table>
-    </div>
-
-    <q-page-sticky
-      v-if="$q.platform.is.mobile"
-      position="bottom-right"
-      :offset="[18, 18]"
+    <DataTable
+      :rowsData="products"
+      :colsData="productColumns"
+      :isLoading="isLoading"
+      :customSlots="['img_url']"
+      labelTitle="Produtos"
+      routeName="form-product"
     >
-      <q-btn fab icon="mdi-plus" color="primary" :to="{ name: 'form-product' }" />
-    </q-page-sticky>
+      <template v-slot:top-buttons>
+        <q-btn
+          color="primary"
+          icon="mdi-store"
+          label="Minha Loja"
+          outline
+          size="sm"
+          rounded
+          class="q-ml-sm"
+          @click="redirectToStore"
+        />
+        <q-btn
+          color="secondary"
+          icon="mdi-content-copy"
+          label="Copiar link"
+          outline
+          size="sm"
+          rounded
+          class="q-ml-sm"
+          @click="copyPublicStoreUrl"
+        />
+      </template>
+
+      <template v-slot:body-cell-img_url="{ item }">
+        <q-td :props="item" :class="item.row.img_url && 'product__img'">
+          <q-img
+            v-if="item.row.img_url"
+            :src="item.row.img_url"
+            :ratio="16/9"
+            spinner-color="primary"
+            spinner-size="20px"
+            @error="item.row.img_url = ''"
+          />
+          <q-icon v-else name="mdi-image-off" size="20px" />
+        </q-td>
+      </template>
+    </DataTable>
   </q-page>
 </template>
 
@@ -108,8 +56,10 @@ import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
 import useAuthUser from 'src/composables/useAuthUser'
 import { productColumns } from './table'
+import DataTable from 'components/DataTable.vue'
 
 export default defineComponent({
+  components: { DataTable },
   name: 'ListPage',
 
   setup () {
