@@ -11,43 +11,13 @@
         @submit.prevent="onSubmit"
         class="col-md-8 col-sm-10 col-xs-10 q-gutter-y-md"
       >
-        <q-input
-          v-model="img"
-          label="Imagem Principal"
-          type="file"
-          accept="image/*"
-          outline
-          stack-label
-          :disable="isUpdate && isLoading"
-        />
-
-        <q-input
+        <InputImage
           v-model="form.img_url"
           label="Imagem Principal"
-          type="text"
-          outline
           :disable="isUpdate && isLoading"
-          @update:model-value="handleErrorClass"
-          error-message="Por favor, verifique a URL informada."
-          :error="!!errorClass"
+          @update-img-file="(data) => imgFile = data"
+          @img-error="(hasError) => showError = !!hasError"
         />
-
-        <q-img
-          v-if="form.img_url"
-          :src="form.img_url"
-          :ratio="4/3"
-          spinner-color="primary"
-          spinner-size="20px"
-          class="product__img"
-          :class="errorClass"
-          @error="handleErrorClass"
-        >
-          <template v-slot:error>
-            <div class="absolute-full flex flex-center bg-negative text-white">
-              URL inválida
-            </div>
-          </template>
-        </q-img>
 
         <q-input
           v-model="form.name"
@@ -122,7 +92,7 @@
         />
 
         <div class="flex q-gutter-x-md" :class="$q.platform.is.desktop ? 'justify-end' : 'justify-center'">
-          <q-btn :label="isUpdate ? 'Atualizar' : 'Cadastrar'" type="submit" color="positive" :disable="!!errorClass" />
+          <q-btn :label="isUpdate ? 'Atualizar' : 'Cadastrar'" type="submit" color="positive" :disable="showError" />
           <q-btn label="Cancelar" color="negative" :to="{ name: 'products' }" />
         </div>
       </q-form>
@@ -136,8 +106,10 @@ import { useRoute, useRouter } from 'vue-router'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
 import { dateTimeFormat } from 'src/utils/format'
+import InputImage from 'components/InputImage.vue'
 
 export default defineComponent({
+  components: { InputImage },
   name: 'FormPage',
 
   setup () {
@@ -158,18 +130,12 @@ export default defineComponent({
     })
     const createdAt = ref('')
 
-    const img = ref([])
+    const imgFile = ref([])
+    const showError = ref(false)
 
     const optionsCategory = ref([])
 
     const isUpdate = computed(() => !!route.params.id)
-
-    const errorClass = ref('')
-    const handleErrorClass = (event) => {
-      event.type && event.type === 'error'
-        ? errorClass.value = 'error'
-        : errorClass.value = ''
-    }
 
     onMounted(() => {
       getCategories()
@@ -207,8 +173,8 @@ export default defineComponent({
 
     const onSubmit = async () => {
       try {
-        if (img.value.length) {
-          const imgUrl = await uploadImg(img.value[0], 'products-img')
+        if (imgFile.value) {
+          const imgUrl = await uploadImg(imgFile.value, 'products-img')
           form.value.img_url = imgUrl
         }
 
@@ -225,26 +191,14 @@ export default defineComponent({
 
     return {
       form,
+      createdAt,
       isLoading,
       isUpdate,
       onSubmit,
-      errorClass,
-      handleErrorClass,
       optionsCategory,
-      img
+      imgFile,
+      showError
     }
   }
 })
 </script>
-
-<style scoped>
-.product__img {
-  height: 100px;
-  width: 100px;
-}
-.product__img:not(.error):hover {
-  height: 400px;
-  width: 400px;
-  z-index: 999;
-}
-</style>

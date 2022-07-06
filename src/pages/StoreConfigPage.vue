@@ -11,16 +11,13 @@
         @submit.prevent="onSubmit"
         class="col-md-8 col-sm-10 col-xs-10 q-gutter-y-md"
       >
-        <q-file
-          v-model="logo"
+        <InputImage
+          v-model="form.logo_url"
           label="Logomarca"
-          accept="image/*"
           :disable="isLoading"
-        >
-          <template v-slot:prepend>
-            <q-icon name="mdi-paperclip" />
-          </template>
-        </q-file>
+          @update-img-file="(data) => logoFile = data"
+          @img-error="(hasError) => showError = !!hasError"
+        />
 
         <q-input
           v-model="form.name"
@@ -50,16 +47,13 @@
           ]"
         />
 
-        <q-file
-          v-model="parallax"
+        <InputImage
+          v-model="form.parallax_url"
           label="Imagem do Banner"
-          accept="image/*"
           :disable="isLoading"
-        >
-          <template v-slot:prepend>
-            <q-icon name="mdi-paperclip" />
-          </template>
-        </q-file>
+          @update-img-file="(data) => parallaxFile = data"
+          @img-error="(hasError) => showError = !!hasError"
+        />
 
         <div class="row justify-center q-gutter-md q-pa-md">
           <q-field borderless class="col-xs-12 col-sm-5 col-lg-3" label="Cor Principal">
@@ -71,7 +65,7 @@
         </div>
 
         <div class="flex q-gutter-x-md" :class="$q.platform.is.desktop ? 'justify-end' : 'justify-center'">
-          <q-btn :label="form.id ? 'Atualizar' : 'Salvar'" type="submit" color="positive" />
+          <q-btn :label="form.id ? 'Atualizar' : 'Salvar'" type="submit" color="positive" :disable="showError" />
           <q-btn label="Cancelar" color="negative" :to="{ name: 'home' }" />
         </div>
       </q-form>
@@ -84,9 +78,12 @@ import { defineComponent, onMounted, ref } from 'vue'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
 import useBrandConfigs from 'src/composables/useBrandConfigs'
+import InputImage from 'components/InputImage.vue'
 
 export default defineComponent({
   name: 'StoreConfigPage',
+
+  components: { InputImage },
 
   setup () {
     const { getByUserId, upsert, uploadImg } = useAPI()
@@ -94,6 +91,7 @@ export default defineComponent({
     const { getDefaultBrandColor, setBrandColors } = useBrandConfigs()
 
     const isLoading = ref(false)
+    const showError = ref(false)
 
     const form = ref({
       id: '',
@@ -105,8 +103,8 @@ export default defineComponent({
       secondary_color: getDefaultBrandColor('secondary')
     })
 
-    const logo = ref([])
-    const parallax = ref([])
+    const logoFile = ref(null)
+    const parallaxFile = ref(null)
 
     onMounted(() => {
       getStoreConfigs()
@@ -130,13 +128,13 @@ export default defineComponent({
 
     const onSubmit = async () => {
       try {
-        if (logo.value.name) {
-          const logoUrl = await uploadImg(logo.value, 'store-brand-img')
+        if (logoFile.value) {
+          const logoUrl = await uploadImg(logoFile.value, 'store-brand-img')
           form.value.logo_url = logoUrl
         }
 
-        if (parallax.value.name) {
-          const parallaxUrl = await uploadImg(parallax.value, 'store-parallax-img')
+        if (parallaxFile.value) {
+          const parallaxUrl = await uploadImg(parallaxFile.value, 'store-parallax-img')
           form.value.parallax_url = parallaxUrl
         }
 
@@ -156,9 +154,10 @@ export default defineComponent({
     return {
       form,
       isLoading,
+      showError,
       onSubmit,
-      logo,
-      parallax
+      logoFile,
+      parallaxFile
     }
   }
 })
