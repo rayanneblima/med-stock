@@ -1,12 +1,14 @@
 <template>
   <q-page padding>
     <DataTable
+      labelTitle="Produtos"
+      routeName="form-product"
       :rowsData="products"
       :colsData="productColumns"
       :isLoading="isLoading"
       :customSlots="['img_url']"
-      labelTitle="Produtos"
-      routeName="form-product"
+      @edit="(id) => onEdit(id)"
+      @delete="({ key, rowName }) => onDelete(key, rowName)"
     >
       <template v-slot:top-buttons>
         <q-btn
@@ -116,7 +118,7 @@ export default defineComponent({
 
     const onDelete = async (id, name) => {
       $q.dialog({
-        title: 'Excluir categoria',
+        title: 'Excluir produto',
         message: `Você realmente deseja excluir o produto <b>${name}</b> ?`,
         cancel: true,
         persistent: true,

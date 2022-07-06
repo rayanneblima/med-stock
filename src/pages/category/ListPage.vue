@@ -1,11 +1,13 @@
 <template>
   <q-page padding>
     <DataTable
+      labelTitle="Categorias"
+      routeName="form-category"
       :rowsData="categories"
       :colsData="categoryColumns"
       :isLoading="isLoading"
-      labelTitle="Categorias"
-      routeName="form-category"
+      @edit="(id) => onEdit(id)"
+      @delete="({ key, rowName }) => onDelete(key, rowName)"
     />
   </q-page>
 </template>

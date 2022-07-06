@@ -41,7 +41,7 @@
             icon="mdi-pencil-outline"
             outline
             size="sm"
-            @click="onEdit(props.key)"
+            @click="$emit('edit', props.key)"
           >
             <q-tooltip anchor="top middle" self="center middle">
               Editar
@@ -53,7 +53,7 @@
             icon="mdi-delete-outline"
             size="sm"
             outline
-            @click="onDelete(props.key, props.row.name)"
+            @click="$emit('delete', { key: props.key, rowName: props.row.name })"
           >
             <q-tooltip anchor="top middle" self="center middle" class="q-mb-sm">
               Excluir
@@ -88,6 +88,8 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'DataTable',
+
+  emits: ['edit', 'delete'],
 
   props: {
     rowsData: {
