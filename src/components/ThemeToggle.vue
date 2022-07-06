@@ -25,7 +25,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      isDarkMode.value = $q.localStorage.getItem('dark-mode')
+      isDarkMode.value = $q.localStorage.getItem('dark-mode') || false
     })
 
     return {
