@@ -11,6 +11,14 @@ const productColumns = [
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions' }
 ]
 
+const excelColumns = [
+  { label: 'Imagem', field: 'img_url' },
+  { label: 'Nome', field: 'name' },
+  { label: 'Quantidade', field: 'amount' },
+  { label: 'Preço', field: 'price' },
+  { label: 'Categoria', field: 'category_name' }
+]
+
 const initialPagination = ref({
   page: 1,
   rowsPerPage: 8
@@ -18,5 +26,6 @@ const initialPagination = ref({
 
 export {
   productColumns,
+  excelColumns,
   initialPagination
 }

@@ -31,6 +31,15 @@
           class="q-ml-sm"
           @click="copyPublicStoreUrl"
         />
+        <q-btn
+          color="primary"
+          icon-right="archive"
+          label="Exportar Tabela"
+          size="sm"
+          rounded
+          class="q-ml-sm"
+          @click="exportTable"
+        />
       </template>
 
       <template v-slot:body-cell-img_url="{ item }">
@@ -53,12 +62,21 @@
 <script>
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useQuasar, openURL, copyToClipboard } from 'quasar'
+import { exportFile, useQuasar, openURL, copyToClipboard } from 'quasar'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
 import useAuthUser from 'src/composables/useAuthUser'
-import { productColumns } from './table'
 import DataTable from 'components/DataTable.vue'
+import { productColumns, excelColumns } from './table'
+
+function wrapCsvValue (val, formatFn, row) {
+  let formatted = formatFn !== void 0 ? formatFn(val, row) : val
+
+  formatted = formatted === void 0 || formatted === null ? '' : String(formatted)
+  formatted = formatted.split('"').join('""')
+
+  return `"${formatted}"`
+}
 
 export default defineComponent({
   components: { DataTable },
@@ -112,6 +130,37 @@ export default defineComponent({
         .catch((error) => notifyError(error.message))
     }
 
+    const exportTable = () => {
+      const content = [excelColumns.map((col) => wrapCsvValue(col.label))]
+        .concat(
+          products.value.map((row) =>
+            excelColumns
+              .map((col) =>
+                wrapCsvValue(
+                  typeof col.field === 'function'
+                    ? col.field(row)
+                    : row[col.field === void 0 ? col.name : col.field],
+                  col.format,
+                  row
+                )
+              )
+              .join(',')
+          )
+        )
+        .join('\r\n')
+
+      const status = exportFile('table-export.csv', content, 'text/csv')
+
+      if (status !== true) {
+        $q.notify({
+          message:
+            'Não foi possível exportar a tabela. Tente novamente mais tarde.',
+          color: 'negative',
+          icon: 'warning'
+        })
+      }
+    }
+
     const onEdit = (id) => {
       router.push({ name: 'form-product', params: { id } })
     }
@@ -138,6 +187,7 @@ export default defineComponent({
       productColumns,
       isLoading,
       products,
+      exportTable,
       onEdit,
       onDelete,
       redirectToStore,
