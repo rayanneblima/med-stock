@@ -21,7 +21,7 @@
 
         <q-input
           v-model="form.name"
-          label="Nome da Loja"
+          label="Nome"
           type="text"
           outline
           :disable="isLoading"
