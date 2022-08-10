@@ -11,6 +11,22 @@
 
       <div class="col-xs-12 col-sm-6 col-md-4">
         <DashboardCard
+          table="laboratories"
+          label="Laboratórios"
+          icon="mdi-home-city"
+        />
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <DashboardCard
+          table="presentations"
+          label="Apresentações"
+          icon="mdi-pill"
+        />
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <DashboardCard
           table="products"
           label="Produtos"
           icon="mdi-archive"
