@@ -4,7 +4,7 @@
       labelTitle="Categorias"
       routeName="form-category"
       :rowsData="categories"
-      :colsData="categoryColumns"
+      :colsData="tableColumns"
       :isLoading="isLoading"
       @edit="(id) => onEdit(id)"
       @delete="({ key, rowName }) => onDelete(key, rowName)"
@@ -18,7 +18,7 @@ import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
-import { categoryColumns } from './table'
+import { tableColumns } from '../simpleTable'
 import DataTable from 'components/DataTable.vue'
 
 export default defineComponent({
@@ -57,7 +57,7 @@ export default defineComponent({
     const onDelete = async (id, name) => {
       $q.dialog({
         title: 'Excluir categoria',
-        message: `Você realmente deseja excluir a categoria <b>${name}</b> ?`,
+        message: `Você realmente deseja excluir a categoria <b>${name}</b>?`,
         cancel: true,
         persistent: true,
         html: true
@@ -73,7 +73,7 @@ export default defineComponent({
     }
 
     return {
-      categoryColumns,
+      tableColumns,
       isLoading,
       categories,
       onEdit,
