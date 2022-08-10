@@ -85,6 +85,18 @@ const linksList = [
     routeName: 'categories'
   },
   {
+    title: 'Laboratórios',
+    caption: '',
+    icon: 'mdi-home-city',
+    routeName: 'laboratories'
+  },
+  {
+    title: 'Apresentações do Medicamento',
+    caption: '',
+    icon: 'mdi-pill',
+    routeName: 'presentations'
+  },
+  {
     title: 'Produtos',
     caption: '',
     icon: 'mdi-archive',
