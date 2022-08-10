@@ -3,10 +3,11 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>
-          Quasar Estoque
-          <span class="text-bold" v-if="storeConfigs.name"> - {{storeConfigs.name}}</span>
+          MedStock
+          <span class="text-bold" v-if="storeConfigs.name">
+            - {{ storeConfigs.name }}</span
+          >
         </q-toolbar-title>
-
       </q-toolbar>
     </q-header>
 

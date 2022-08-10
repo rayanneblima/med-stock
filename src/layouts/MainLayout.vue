@@ -12,8 +12,10 @@
         />
 
         <q-toolbar-title>
-          Quasar Estoque
-          <span class="text-bold" v-if="storeConfigs.name"> - {{storeConfigs.name}}</span>
+          MedStock
+          <span class="text-bold" v-if="storeConfigs.name">
+            - {{ storeConfigs.name }}</span
+          >
         </q-toolbar-title>
 
         <ThemeToggle />
@@ -33,17 +35,9 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label
-          header
-        >
-          Menu
-        </q-item-label>
+        <q-item-label header> Menu </q-item-label>
 
         <EssentialLink
           v-for="link in essentialLinks"
