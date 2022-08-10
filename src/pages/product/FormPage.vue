@@ -32,24 +32,68 @@
           ]"
         />
 
+        <q-select
+          v-model="form.laboratory_id"
+          label="Laboratório"
+          :options="optionsLaboratory"
+          option-value="id"
+          option-label="name"
+          map-options
+          emit-value
+          outline
+          :disable="isUpdate && isLoading"
+        />
+
+        <q-select
+          v-model="form.presentation_id"
+          label="Apresentação"
+          :options="optionsPresentation"
+          option-value="id"
+          option-label="name"
+          map-options
+          emit-value
+          outline
+          :disable="isUpdate && isLoading"
+        />
+
+        <q-select
+          v-model="form.category_id"
+          label="Categoria"
+          :options="optionsCategory"
+          option-value="id"
+          option-label="name"
+          map-options
+          emit-value
+          outline
+          :disable="isUpdate && isLoading"
+        />
+
         <q-editor
-          v-model="form.description"
-          placeholder="Descrição"
+          v-model="form.composition"
+          placeholder="Composição"
           min-height="5rem"
           :disable="isUpdate && isLoading"
         />
 
-        <q-input
-          v-model="form.amount"
-          label="Quantidade"
-          type="number"
-          outline
-          min="0"
+        <q-editor
+          v-model="form.dosage"
+          placeholder="Posologia"
+          min-height="5rem"
           :disable="isUpdate && isLoading"
-          lazy-rules
-          :rules="[
-            val => !!val || 'Por favor, informe a quantidade do produto.'
-          ]"
+        />
+
+        <q-editor
+          v-model="form.indication"
+          placeholder="Indicação"
+          min-height="5rem"
+          :disable="isUpdate && isLoading"
+        />
+
+        <q-editor
+          v-model="form.contraindication"
+          placeholder="Contraindicação"
+          min-height="5rem"
+          :disable="isUpdate && isLoading"
         />
 
         <q-input
@@ -66,20 +110,11 @@
           ]"
         />
 
-        <q-select
-          v-model="form.category_id"
-          label="Categoria"
-          :options="optionsCategory"
-          option-value="id"
-          option-label="name"
-          map-options
-          emit-value
-          outline
+        <q-editor
+          v-model="form.note"
+          placeholder="Observações"
+          min-height="5rem"
           :disable="isUpdate && isLoading"
-          lazy-rules
-          :rules="[
-            val => !!val || 'Por favor, informe a categoria do produto.'
-          ]"
         />
 
         <q-input
@@ -123,27 +158,59 @@ export default defineComponent({
     const form = ref({
       img_url: '',
       name: '',
-      description: '',
-      amount: 0,
+      laboratory_id: '',
+      presentation_id: '',
+      category_id: '',
+      composition: '',
+      dosage: '',
+      indication: '',
+      contraindication: '',
       price: 0,
-      category_id: ''
+      note: ''
     })
+
     const createdAt = ref('')
 
     const imgFile = ref([])
     const showError = ref(false)
 
+    const optionsLaboratory = ref([])
+    const optionsPresentation = ref([])
     const optionsCategory = ref([])
 
     const isUpdate = computed(() => !!route.params.id)
 
     onMounted(() => {
+      getLaboratories()
+      getPresentations()
       getCategories()
 
       if (isUpdate.value) {
         getProduct()
       }
     })
+
+    const getLaboratories = async () => {
+      try {
+        isLoading.value = true
+        const laboratoriesList = await publicList('laboratories')
+        optionsLaboratory.value = laboratoriesList
+      } catch (error) {
+        notifyError(error.message)
+      }
+      isLoading.value = false
+    }
+
+    const getPresentations = async () => {
+      try {
+        isLoading.value = true
+        const presentationsList = await publicList('presentations')
+        optionsPresentation.value = presentationsList
+      } catch (error) {
+        notifyError(error.message)
+      }
+      isLoading.value = false
+    }
 
     const getCategories = async () => {
       try {
@@ -195,6 +262,8 @@ export default defineComponent({
       isLoading,
       isUpdate,
       onSubmit,
+      optionsLaboratory,
+      optionsPresentation,
       optionsCategory,
       imgFile,
       showError

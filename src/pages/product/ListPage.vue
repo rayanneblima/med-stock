@@ -97,11 +97,13 @@ export default defineComponent({
       try {
         isLoading.value = true
 
-        const response = await list('products', '*, categories (name)', user.value.id)
+        const response = await list('products', '*, laboratories (name), presentations (name), categories (name)', user.value.id)
 
         products.value = response.map((product) => {
           return {
             ...product,
+            laboratory_name: product.laboratories.name,
+            presentation_name: product.presentations.name,
             category_name: product.categories.name
           }
         })
@@ -168,7 +170,7 @@ export default defineComponent({
     const onDelete = async (id, name) => {
       $q.dialog({
         title: 'Excluir produto',
-        message: `Você realmente deseja excluir o produto <b>${name}</b> ?`,
+        message: `Você realmente deseja excluir o produto <b>${name}</b>?`,
         cancel: true,
         persistent: true,
         html: true
@@ -200,7 +202,7 @@ export default defineComponent({
 <style scoped>
 .product__img:hover {
   position: absolute;
-  width: 260px;
+  width: 320px;
   z-index: 999;
 }
 </style>
