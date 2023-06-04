@@ -52,8 +52,8 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
       env: {
-        SUPABASE_URL: 'https://ewaaasukfuemiomdmvdv.supabase.co',
-        SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3YWFhc3VrZnVlbWlvbWRtdmR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ3Mzc1NjgsImV4cCI6MTk3MDMxMzU2OH0.ZmsVMxZ1Q7jNxJcsPv658Kxc64V_PgbZufDkIl-72qA'
+        SUPABASE_URL: 'https://wddorjhiyufvkdyzqodb.supabase.co',
+        SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZG9yamhpeXVmdmtkeXpxb2RiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODQ2MzM5NTMsImV4cCI6MjAwMDIwOTk1M30.85RQoJWCE77CMDk7TGI3CD1ey5Te18iXrl7zeejfwE8',
       },
 
       // transpile: false,
@@ -173,9 +173,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Estudos Quasar',
-        short_name: 'Estudos Quasar',
-        description: 'A Quasar Project',
+        name: 'Med Stock',
+        short_name: 'Med Stock',
+        description: 'Gerenciamento de estoque de medicamentos de forma simples e fácil.',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

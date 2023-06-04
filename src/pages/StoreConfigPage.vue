@@ -75,9 +75,9 @@
 
 <script>
 import { defineComponent, onMounted, ref } from 'vue'
+import useBrandConfigs from 'src/composables/useBrandConfigs'
 import useAPI from 'src/composables/useAPI'
 import useNotify from 'src/composables/useNotify'
-import useBrandConfigs from 'src/composables/useBrandConfigs'
 import InputImage from 'components/InputImage.vue'
 
 export default defineComponent({
@@ -114,7 +114,7 @@ export default defineComponent({
       try {
         isLoading.value = true
 
-        const configs = await getByUserId('store_configs')
+        const configs = await getByUserId('stores_config')
 
         if (configs) {
           form.value = configs
@@ -138,7 +138,7 @@ export default defineComponent({
           form.value.parallax_url = parallaxUrl
         }
 
-        await upsert('store_configs', form.value)
+        await upsert('stores_config', form.value)
 
         setBrandColors({
           primary: form.value.primary_color,

@@ -110,13 +110,13 @@ export default function useAPI () {
   }
 
   const upsert = async (table, form) => {
-    const id = form.id || crypto.randomUUID()
+    const { id, ...restForm } = form
 
     const { data, error } = await supabase
       .from(table)
       .upsert({
-        id,
-        ...form,
+        ...(!!form.id && { id: form.id }),
+        ...restForm,
         user_id: user.value.id
       }, { onConflict: 'id' })
 
@@ -167,7 +167,7 @@ export default function useAPI () {
 
     if (userId) {
       const { data, error } = await supabase
-        .from('store_configs')
+        .from('stores_config')
         .select('*')
         .eq('user_id', userId)
 

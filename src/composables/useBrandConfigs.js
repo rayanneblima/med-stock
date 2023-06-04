@@ -11,8 +11,14 @@ export default function useBrandConfigs () {
     })
   }
 
+  const resetBrandColors = () => {
+    setCssVar('primary', '#0e7ba8')
+    setCssVar('primary', '#3dcdd4')
+  }
+
   return {
     getDefaultBrandColor,
-    setBrandColors
+    setBrandColors,
+    resetBrandColors
   }
 }

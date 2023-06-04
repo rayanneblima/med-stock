@@ -65,11 +65,12 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import useBrandConfigs from 'src/composables/useBrandConfigs'
 import useAuthUser from 'src/composables/useAuthUser'
 import useNotify from 'src/composables/useNotify'
 import useAPI from 'src/composables/useAPI'
-import EssentialLink from 'components/EssentialLink.vue'
-import ThemeToggle from 'components/ThemeToggle.vue'
+import EssentialLink from 'components/EssentialLink'
+import ThemeToggle from 'components/ThemeToggle'
 
 const linksList = [
   {
@@ -123,6 +124,7 @@ export default defineComponent({
     const { logout } = useAuthUser()
     const { notifyDefault } = useNotify()
     const { storeConfigs, setStoreConfigs } = useAPI()
+    const { resetBrandColors } = useBrandConfigs()
 
     const $q = useQuasar()
 
@@ -140,6 +142,7 @@ export default defineComponent({
         persistent: true
       }).onOk(async () => {
         await logout()
+        resetBrandColors()
         notifyDefault('Até breve!')
         router.replace({ name: 'login' })
       })
