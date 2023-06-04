@@ -39,7 +39,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-webpack/quas
 
 ### Supabase Configuration
 1. Start a Supabase Project
-2. Create 2 buckets: "store-brand-img" and "store-parallax-img"
+2. Create 3 buckets: "store-brand-img", "store-parallax-img" and "products-img"
 3. Copy and paste in SQL Editor page to create project tables:
 ```
 create table categories (
